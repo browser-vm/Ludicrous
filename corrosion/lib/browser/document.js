@@ -1,3 +1,18 @@
+function sanitizeInput(input) {
+    return input.replace(/[&<>"'`=\/]/g, function (s) {
+        return ({
+            '&': '&amp;',
+            '<': '&lt;',
+            '>': '&gt;',
+            '"': '&quot;',
+            "'": '&#39;',
+            '`': '&#x60;',
+            '=': '&#x3D;',
+            '/': '&#x2F;'
+        })[s];
+    });
+}
+
 function createDocumentRewriter(ctx) {
     return function rewriteDocument() {
         if (ctx.serviceWorker) return;
@@ -29,7 +44,7 @@ function createDocumentRewriter(ctx) {
         if (ctx.window.Document.prototype.write) {
             ctx.window.Document.prototype.write = new Proxy(ctx.window.Document.prototype.write, {
                 apply: (target, that , args) => {
-                    if (args.length) args = [ ctx.html.process(args.join(''), ctx.meta) ];
+                    if (args.length) args = [ ctx.html.process(sanitizeInput(args.join('')), ctx.meta) ];
                     return Reflect.apply(target, that, args);
                 },
             });
@@ -52,7 +67,7 @@ function createDocumentRewriter(ctx) {
         if (ctx.window.Document.prototype.writeln) {
             ctx.window.Document.prototype.writeln = new Proxy(ctx.window.Document.prototype.writeln, {
                 apply: (target, that , args) => {
-                    if (args.length) args = [ ctx.html.process(args.join(''), ctx.meta) ];
+                    if (args.length) args = [ ctx.html.process(sanitizeInput(args.join('')), ctx.meta) ];
                     return Reflect.apply(target, that, args);
                 },
             });
@@ -129,7 +144,7 @@ function createDocumentRewriter(ctx) {
                 }),
                 set: new Proxy(descriptor.set, {
                     apply(target, that, [ val ]) {
-                        return Reflect.apply(target, that, [ val ? ctx.html.process(val.toString(), ctx.meta) : val, ]);
+                        return Reflect.apply(target, that, [ val ? ctx.html.process(sanitizeInput(val.toString()), ctx.meta) : val, ]);
                     },
                 }), 
             });
