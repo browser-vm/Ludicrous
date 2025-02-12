@@ -10,7 +10,7 @@
     "go": "npm run build && npm start"
   },
   "dependencies": {
-    "@tomphttp/bare-server-node": "^1.0.2-beta-readme5",
+    "@tomphttp/bare-server-node": "^2.0.5",
     "acorn-hammerhead": "^0.6.1",
     "css-tree": "^2.2.1",
     "express": "^4.18.1",
