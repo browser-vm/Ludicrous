@@ -13,7 +13,7 @@
     "@tomphttp/bare-server-node": "^2.0.5",
     "acorn-hammerhead": "^0.6.3",
     "css-tree": "^2.3.1",
-    "express": "^4.21.2",
+    "express": "^4.22.1",
     "next": "15.1.7",
     "next-absolute-url": "^1.2.2",
     "next-pwa": "^5.6.0",
